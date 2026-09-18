@@ -9,5 +9,5 @@
  <servlet-mapping><servlet-name>logout</servlet-name><url-pattern>/logout</url-pattern></servlet-mapping>
  <servlet><servlet-name>placeholder</servlet-name><servlet-class>com.thabitha.thabithamart.controller.PlaceholderServlet</servlet-class></servlet>
  <servlet-mapping><servlet-name>placeholder</servlet-name><url-pattern>/feature/*</url-pattern></servlet-mapping>
- <welcome-file-list><welcome-file>home</welcome-file></welcome-file-list>
+ <welcome-file-list><welcome-file>login</welcome-file></welcome-file-list>
 </web-app>

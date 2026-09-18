@@ -10,64 +10,78 @@ import com.thabitha.thabithamart.util.PasswordUtil;
 
 public class AuthServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest r, HttpServletResponse s)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        r.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(r, s);
+        request.getRequestDispatcher("/Login.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest r, HttpServletResponse s)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = r.getParameter("action");
-        String u = r.getParameter("username");
-        String p = r.getParameter("password");
+        String action = request.getParameter("action");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
         try {
 
-            UserDao d = new UserDao();
+            UserDao dao = new UserDao();
 
             if ("register".equals(action)) {
 
-                String role = r.getParameter("role");
+                String role = request.getParameter("role");
 
-                d.create(u, PasswordUtil.hash(p), role);
+                dao.create(
+                    username,
+                    PasswordUtil.hash(password),
+                    role
+                );
 
-                s.sendRedirect("login");
+                response.sendRedirect(
+                    request.getContextPath() + "/login"
+                );
 
                 return;
             }
 
-            User x = d.find(u);
+            User user = dao.find(username);
 
-            if (x != null && PasswordUtil.matches(p, x.passwordHash)) {
+            if (user != null &&
+                PasswordUtil.matches(password, user.passwordHash)) {
 
-                HttpSession old = r.getSession(false);
+                HttpSession oldSession = request.getSession(false);
 
-                if (old != null) {
-                    old.invalidate();
+                if (oldSession != null) {
+                    oldSession.invalidate();
                 }
 
-                HttpSession n = r.getSession(true);
+                HttpSession session = request.getSession(true);
 
-                n.setMaxInactiveInterval(1800);
+                session.setMaxInactiveInterval(1800);
 
-                n.setAttribute("user", x);
+                session.setAttribute("user", user);
 
-                s.sendRedirect("home");
+                response.sendRedirect(
+                    request.getContextPath() + "/home"
+                );
 
             } else {
 
-                s.sendError(401, "Invalid credentials");
+                request.setAttribute(
+                    "error",
+                    "Invalid username or password"
+                );
 
+                request.getRequestDispatcher(
+                    "/Login.jsp"
+                ).forward(request, response);
             }
 
         } catch (Exception e) {
 
             throw new ServletException(e);
-
         }
-
     }
-
 }
