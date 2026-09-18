@@ -14,3 +14,17 @@ CREATE TABLE IF NOT EXISTS products (
     image_url VARCHAR(500),
     description VARCHAR(500)
 );
+MERGE INTO products(name, category, price, stock, image_url, description)
+KEY(name)
+VALUES
+('Classic T-Shirt', 'Men', 599.00, 20, '', 'Comfortable cotton T-Shirt'),
+
+('Denim Jeans', 'Men', 1299.00, 15, '', 'Premium denim jeans'),
+
+('Casual Shirt', 'Men', 899.00, 12, '', 'Stylish casual shirt'),
+
+('Floral Dress', 'Women', 999.00, 10, '', 'Elegant floral dress'),
+
+('Women Kurti', 'Women', 799.00, 25, '', 'Comfortable designer kurti'),
+
+('Handbag', 'Women', 699.00, 18, '', 'Modern everyday handbag');
