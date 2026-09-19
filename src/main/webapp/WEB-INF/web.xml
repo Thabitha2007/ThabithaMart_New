@@ -10,4 +10,12 @@
  <servlet><servlet-name>placeholder</servlet-name><servlet-class>com.thabitha.thabithamart.controller.PlaceholderServlet</servlet-class></servlet>
  <servlet-mapping><servlet-name>placeholder</servlet-name><url-pattern>/feature/*</url-pattern></servlet-mapping>
  <welcome-file-list><welcome-file>login</welcome-file></welcome-file-list>
+ <servlet>
+    <servlet-name>ProductServlet</servlet-name>
+    <servlet-class>com.thabitha.thabithamart.controller.ProductServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>ProductServlet</servlet-name>
+    <url-pattern>/products</url-pattern>
+</servlet-mapping>
 </web-app>
