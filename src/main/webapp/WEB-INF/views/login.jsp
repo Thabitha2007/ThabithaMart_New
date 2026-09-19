@@ -11,8 +11,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px 0;
         }
         .container {
             background-color: #ffffff;
@@ -25,6 +26,7 @@
             margin-top: 0;
             text-align: center;
             color: #333333;
+            font-size: 22px;
         }
         .form-group {
             margin-bottom: 16px;
@@ -37,6 +39,7 @@
         }
         input[type="text"],
         input[type="password"],
+        input[type="email"],
         select {
             width: 100%;
             padding: 10px;
@@ -55,6 +58,7 @@
             font-size: 16px;
             cursor: pointer;
             margin-top: 8px;
+            font-weight: bold;
         }
         .btn:hover {
             background-color: #0056b3;
@@ -63,6 +67,17 @@
             background-color: #ffe6e6;
             color: #d9534f;
             border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 16px;
@@ -83,13 +98,21 @@
 <body>
 
 <div class="container">
-    <%-- Error message display --%>
+    <%-- மெசேஜ் காட்டும் பகுதி --%>
     <% 
         String error = (String) request.getAttribute("error");
         if (error != null && !error.trim().isEmpty()) { 
     %>
         <div class="error-message">
             <%= error %>
+        </div>
+    <% 
+        } 
+        String message = (String) request.getAttribute("message");
+        if (message != null && !message.trim().isEmpty()) { 
+    %>
+        <div class="success-message">
+            <%= message %>
         </div>
     <% 
         } 
@@ -128,6 +151,11 @@
             </div>
 
             <div class="form-group">
+                <label for="reg-email">Email Address</label>
+                <input type="email" id="reg-email" name="email" required>
+            </div>
+
+            <div class="form-group">
                 <label for="reg-password">Password</label>
                 <input type="password" id="reg-password" name="password" required>
             </div>
@@ -135,9 +163,8 @@
             <div class="form-group">
                 <label for="reg-role">Role</label>
                 <select id="reg-role" name="role" required>
-                    <option value="CUSTOMER">Customer</option>
-                    <option value="SELLER">Seller</option>
-                    <option value="ADMIN">Admin</option>
+                    <option value="BUYER">Buyer (Customer)</option>
+                    <option value="SELLER">Seller (Merchant)</option>
                 </select>
             </div>
 
