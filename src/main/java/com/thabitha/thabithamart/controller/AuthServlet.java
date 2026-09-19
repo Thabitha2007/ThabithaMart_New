@@ -14,7 +14,7 @@ public class AuthServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class AuthServlet extends HttpServlet {
                 );
 
                 request.getRequestDispatcher(
-                    "/Login.jsp"
+                    "/WEB-INF/views/login.jsp"
                 ).forward(request, response);
             }
 
