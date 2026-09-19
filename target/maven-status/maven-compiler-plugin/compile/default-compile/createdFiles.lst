@@ -19,6 +19,7 @@ com\thabitha\thabithamart\filter\AuthFilter.class
 com\thabitha\thabithamart\controller\LogoutServlet.class
 com\thabitha\thabithamart\model\Product.class
 com\thabitha\thabithamart\exception\package-info.class
+com\thabitha\thabithamart\controller\ProductServlet.class
 com\thabitha\thabithamart\listener\package-info.class
 com\thabitha\thabithamart\dao\UserDao.class
 com\thabitha\thabithamart\service\package-info.class
