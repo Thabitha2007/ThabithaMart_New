@@ -1,4 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.thabitha.thabithamart.model.User" %>
+<%
+    // Session-ல் இருந்து லாகின் செய்த பயனர் தகவல்களைப் பெறுதல்
+    User currentUser = (User) session.getAttribute("user");
+    String role = (String) session.getAttribute("role");
+    String username = (String) session.getAttribute("username");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,16 +37,40 @@
             color: #ffffff;
             letter-spacing: 0.5px;
         }
+        .navbar .nav-items {
+            display: flex;
+            align-items: center;
+        }
         .navbar .nav-items a {
             color: #cfcfcf;
             text-decoration: none;
-            margin-left: 28px;
+            margin-left: 24px;
             font-size: 14px;
             transition: color 0.2s;
         }
         .navbar .nav-items a:hover {
             color: #ffffff;
         }
+
+        /* User Profile & Role Badges */
+        .user-greeting {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .role-tag {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        .role-BUYER { background-color: #17a2b8; color: #fff; }
+        .role-SELLER { background-color: #28a745; color: #fff; }
+        .role-ADMIN { background-color: #dc3545; color: #fff; }
 
         /* Hero Text Area */
         .hero {
@@ -86,7 +117,7 @@
         .category-box {
             background-color: #eae5d9;
             border-radius: 8px;
-            height: 180px; /* நீங்கள் கேட்ட பெரிய சைஸ் */
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -117,8 +148,29 @@
         <div class="brand">ThabithaMart</div>
         <div class="nav-items">
             <a href="${pageContext.request.contextPath}/home">Browse</a>
+
+            <%-- Seller அல்லது Admin லாகின் செய்திருந்தால் மட்டும் தெரியும் ஆப்ஷன்கள் --%>
+            <% if ("SELLER".equals(role) || "ADMIN".equals(role)) { %>
+                <a href="${pageContext.request.contextPath}/seller/add-product" style="color: #28a745; font-weight: 600;">+ Add Product</a>
+            <% } %>
+
+            <%-- Admin-க்கு மட்டும் பிரத்யேக ஆப்ஷன் --%>
+            <% if ("ADMIN".equals(role)) { %>
+                <a href="${pageContext.request.contextPath}/admin/dashboard" style="color: #ffc107; font-weight: 600;">Admin Panel</a>
+            <% } %>
+
             <a href="${pageContext.request.contextPath}/cart">Cart</a>
-            <a href="${pageContext.request.contextPath}/logout">Logout</a>
+
+            <%-- பயனர் லாகின் செய்துள்ளாரா என்பதைச் சரிபார்த்தல் --%>
+            <% if (currentUser != null || username != null) { %>
+                <span class="user-greeting">
+                    <span>Hi, <strong><%= (username != null) ? username : currentUser.username %></strong></span>
+                    <span class="role-tag role-<%= role %>"><%= role %></span>
+                </span>
+                <a href="${pageContext.request.contextPath}/logout" style="color: #ff6b6b;">Logout</a>
+            <% } else { %>
+                <a href="${pageContext.request.contextPath}/login" style="font-weight: 600; color: #ffffff;">Login / Register</a>
+            <% } %>
         </div>
     </div>
 
