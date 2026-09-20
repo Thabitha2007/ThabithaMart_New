@@ -39,3 +39,5 @@ VALUES
 ('Sporty Track Pants', 'Men', 699.00, 20, 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500&q=80', 'Quick-dry activewear track pants for gym & run'),
 ('Striped Polo T-Shirt', 'Men', 749.00, 16, 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&q=80', 'Collared premium polo shirt for weekend outings'),
 ('Leather Bomber Jacket', 'Men', 2899.00, 10, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80', 'Classic vintage black faux leather jacket');
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS seller_id BIGINT;
