@@ -86,9 +86,8 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>addProduct</servlet-name>
-        <url-pattern>/seller/product/add</url-pattern>
+        <url-pattern>/seller/add-product</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>editProduct</servlet-name>
         <servlet-class>com.thabitha.thabithamart.controller.EditProductServlet</servlet-class>

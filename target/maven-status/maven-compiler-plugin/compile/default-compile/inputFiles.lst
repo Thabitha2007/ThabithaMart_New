@@ -1,10 +1,16 @@
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\AddProductServlet.java
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\AuthFilter.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\AuthServlet.java
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\DeleteProductServlet.java
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\EditProductServlet.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\HomeServlet.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\LogoutServlet.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\package-info.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\PlaceholderServlet.java
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\ProductListServlet.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\controller\ProductServlet.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\dao\package-info.java
+C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\dao\ProductDAO.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\dao\UserDao.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\dto\CheckoutRequest.java
 C:\Users\THABITHA\Documents\ThabithaMart New\ThabithaMart\src\main\java\com\thabitha\thabithamart\dto\package-info.java

@@ -6,9 +6,12 @@ com\thabitha\thabithamart\model\package-info.class
 com\thabitha\thabithamart\model\User.class
 com\thabitha\thabithamart\controller\package-info.class
 com\thabitha\thabithamart\controller\PlaceholderServlet.class
+com\thabitha\thabithamart\controller\DeleteProductServlet.class
+com\thabitha\thabithamart\dao\ProductDAO.class
 com\thabitha\thabithamart\dto\package-info.class
 com\thabitha\thabithamart\dao\package-info.class
 com\thabitha\thabithamart\util\package-info.class
+com\thabitha\thabithamart\controller\EditProductServlet.class
 com\thabitha\thabithamart\dto\CheckoutRequest.class
 com\thabitha\thabithamart\filter\package-info.class
 com\thabitha\thabithamart\model\CartItem.class
@@ -19,7 +22,10 @@ com\thabitha\thabithamart\filter\AuthFilter.class
 com\thabitha\thabithamart\controller\LogoutServlet.class
 com\thabitha\thabithamart\model\Product.class
 com\thabitha\thabithamart\exception\package-info.class
+com\thabitha\thabithamart\controller\AuthFilter.class
 com\thabitha\thabithamart\controller\ProductServlet.class
+com\thabitha\thabithamart\controller\ProductListServlet.class
 com\thabitha\thabithamart\listener\package-info.class
 com\thabitha\thabithamart\dao\UserDao.class
+com\thabitha\thabithamart\controller\AddProductServlet.class
 com\thabitha\thabithamart\service\package-info.class

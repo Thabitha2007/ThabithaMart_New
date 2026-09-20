@@ -150,10 +150,9 @@
             <a href="${pageContext.request.contextPath}/home">Browse</a>
 
             <%-- Seller அல்லது Admin லாகின் செய்திருந்தால் மட்டும் தெரியும் ஆப்ஷன்கள் --%>
-            <% if ("SELLER".equals(role) || "ADMIN".equals(role)) { %>
+           <% if ("SELLER".equals(role) || "ADMIN".equals(role)) { %>
                 <a href="${pageContext.request.contextPath}/seller/add-product" style="color: #28a745; font-weight: 600;">+ Add Product</a>
             <% } %>
-
             <%-- Admin-க்கு மட்டும் பிரத்யேக ஆப்ஷன் --%>
             <% if ("ADMIN".equals(role)) { %>
                 <a href="${pageContext.request.contextPath}/admin/dashboard" style="color: #ffc107; font-weight: 600;">Admin Panel</a>

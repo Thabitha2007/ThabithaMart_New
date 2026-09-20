@@ -22,7 +22,7 @@
     <% if (request.getAttribute("errorMessage") != null) { %>
         <div class="error"><%= request.getAttribute("errorMessage") %></div>
     <% } %>
-    <form action="<%= request.getContextPath() %>/seller/product/add" method="post">
+    <form action="<%= request.getContextPath() %>/seller/add-product" method="post">
         <label>Product Name</label>
         <input type="text" name="name" required>
         <label>Description</label>
