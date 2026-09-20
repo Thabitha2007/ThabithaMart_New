@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 MERGE INTO users (username, password_hash, email, role)
 KEY(username)
 VALUES 
-('admin', '$2a$12$R9h/cIPz0gi.URNNX3kh2OPST9/PgBkqquzi.Ss7KIUgO2t0jWMUW', 'admin@thabithamart.com', 'ADMIN'),
+('admin', '$2a$12$t7S16S/Gz8onn9Bo31LlyeIrXWMJJlE0F2HaSkDv22hBylqyToPE6', 'admin@thabithamart.com', 'ADMIN');
 ('seller1', '$2a$12$8K1p/a0dL1LXMIgoEDFrwOdgqT0Gvh.Q8xo6N5vKz0r51Vn7p7yG2', 'seller@thabithamart.com', 'SELLER'),
 ('buyer1', '$2a$12$e0MYzX1Wq8rU8gA9L5YJ.O7MvQ5G3d2n5K8R6W9Z2y4x7v0u1s3tG', 'buyer@thabithamart.com', 'BUYER');
 

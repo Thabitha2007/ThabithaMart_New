@@ -1,151 +1,137 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.*, java.text.NumberFormat" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>${categoryName}'s Wear - ThabithaMart</title>
+    <title><%= request.getAttribute("categoryName") %> - ThabithaMart</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f6f3eb;
-            color: #2b2b2b;
-            padding: 30px 48px;
-        }
-        .header-bar {
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f6fa; color: #222; }
+
+        .navbar {
+            background: #1a1a2e;
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #eae5d9;
-            padding-bottom: 16px;
-            margin-bottom: 28px;
         }
-        .header-bar h2 {
-            font-size: 26px;
-            font-weight: 700;
-        }
-        .back-btn {
+        .navbar .brand { color: #fff; font-size: 22px; font-weight: 700; }
+        .navbar .links a {
+            color: #ddd;
             text-decoration: none;
-            color: #222;
-            font-weight: 600;
-            background: #eae5d9;
-            padding: 9px 16px;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: background 0.2s;
+            margin-left: 22px;
+            font-size: 15px;
         }
-        .back-btn:hover {
-            background: #dfd9cb;
+        .navbar .links a:hover, .navbar .links a.active { color: #ffcb45; }
+
+        .page-header {
+            text-align: center;
+            padding: 28px 16px 8px;
         }
+        .page-header h1 { font-size: 26px; color: #1a1a2e; }
+        .page-header p { color: #777; margin-top: 6px; }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 24px;
+            padding: 24px 32px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
+
         .product-card {
-            background: #ffffff;
-            border-radius: 8px;
+            background: #fff;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .product-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.14);
         }
-        .product-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            background-color: #f0f0f0;
-            display: block;
-        }
+
+        .product-card img { width: 100%; height: 220px; object-fit: cover; }
+
         .product-info {
             padding: 16px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-        .product-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #222;
-            margin-bottom: 6px;
-        }
-        .product-desc {
+        .product-info h3 { font-size: 17px; margin-bottom: 6px; color: #1a1a2e; }
+        .product-info p.desc {
             font-size: 13px;
-            color: #666;
-            margin-bottom: 12px;
+            color: #777;
             flex-grow: 1;
+            margin-bottom: 12px;
             line-height: 1.4;
         }
-        .product-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
-            margin-bottom: 14px;
-        }
-        .cart-btn {
-            background-color: #111111;
-            color: white;
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price { font-size: 18px; font-weight: 700; color: #d6336c; }
+
+        .add-btn {
+            background: #1a1a2e;
+            color: #fff;
             border: none;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
             cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-            transition: background 0.2s;
         }
-        .cart-btn:hover {
-            background-color: #333333;
-        }
+        .add-btn:hover { background: #ffcb45; color: #1a1a2e; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <div class="header-bar">
-        <h2>${categoryName}'s Wear</h2>
-        <a class="back-btn" href="${pageContext.request.contextPath}/home">← Back to Home</a>
+<%
+    String categoryName = (String) request.getAttribute("categoryName");
+    List<Map<String, Object>> products = (List<Map<String, Object>>) request.getAttribute("products");
+    NumberFormat nf = NumberFormat.getInstance(new Locale("en", "IN"));
+    nf.setMinimumFractionDigits(2);
+    nf.setMaximumFractionDigits(2);
+%>
+
+    <div class="navbar">
+        <div class="brand">ThabithaMart</div>
+        <div class="links">
+            <a href="products?category=Men"        class="<%= "Men".equals(categoryName) ? "active" : "" %>">Men</a>
+            <a href="products?category=Women"       class="<%= "Women".equals(categoryName) ? "active" : "" %>">Women</a>
+            <a href="products?category=Footwear"    class="<%= "Footwear".equals(categoryName) ? "active" : "" %>">Footwear</a>
+            <a href="products?category=Accessories" class="<%= "Accessories".equals(categoryName) ? "active" : "" %>">Accessories</a>
+        </div>
     </div>
 
-    <div class="product-grid">
-        <%
-            List<Map<String, Object>> products = (List<Map<String, Object>>) request.getAttribute("products");
-            if (products != null && !products.isEmpty()) {
-                for (Map<String, Object> p : products) {
-                    String img = (String) p.get("imageUrl");
-                    
-                   
-                    if (img == null || img.trim().isEmpty() || img.contains("photo-1521572267360-ee0c2909d518")) {
-                        img = "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500&q=80";
-                    }
-        %>
-            <div class="product-card">
-                <img src="<%= img %>" alt="<%= p.get("name") %>" class="product-img">
-                <div class="product-info">
-                    <div class="product-title"><%= p.get("name") %></div>
-                    <div class="product-desc"><%= p.get("description") %></div>
-                    <div class="product-price">₹ <%= String.format("%.2f", p.get("price")) %></div>
-                    <button class="cart-btn">Add to Cart</button>
-                </div>
-            </div>
-        <%
-                }
-            } else {
-        %>
-            <p>No products available in this category yet.</p>
-        <%
-            }
-        %>
+    <div class="page-header">
+        <h1><%= categoryName %> Collection</h1>
+        <p>Handpicked products just for you</p>
     </div>
+
+    <% if (products == null || products.isEmpty()) { %>
+        <div class="empty-state">No products found in this category.</div>
+    <% } else { %>
+        <div class="product-grid">
+            <% for (Map<String, Object> p : products) { %>
+                <div class="product-card">
+                    <img src="<%= p.get("imageUrl") %>" alt="<%= p.get("name") %>">
+                    <div class="product-info">
+                        <h3><%= p.get("name") %></h3>
+                        <p class="desc"><%= p.get("description") %></p>
+                        <div class="price-row">
+                            <span class="price">&#8377;<%= nf.format(p.get("price")) %></span>
+                            <button class="add-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
 
 </body>
 </html>
