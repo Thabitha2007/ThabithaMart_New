@@ -41,3 +41,5 @@ VALUES
 ('Leather Bomber Jacket', 'Men', 2899.00, 10, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80', 'Classic vintage black faux leather jacket');
 
 ALTER TABLE products ADD COLUMN IF NOT EXISTS seller_id BIGINT;
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP;

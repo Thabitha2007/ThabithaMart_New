@@ -6,6 +6,7 @@ public class User {
     public String passwordHash;
     public String email;
     public String role;
+    public java.sql.Timestamp lastLogin;
 
     // Default constructor
     public User() {

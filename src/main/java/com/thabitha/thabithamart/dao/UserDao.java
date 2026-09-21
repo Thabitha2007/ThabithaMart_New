@@ -47,4 +47,35 @@ public class UserDao {
             p.executeUpdate();
         }
     }
+
+    // Login success ஆனதும் இதை call பண்ணி, அந்த நேரத்தை DB-ல update பண்ணுவோம்
+    public void updateLastLogin(long userId) throws SQLException {
+        String sql = "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?";
+        try (Connection c = DB.get();
+             PreparedStatement p = c.prepareStatement(sql)) {
+            p.setLong(1, userId);
+            p.executeUpdate();
+        }
+    }
+
+    // Admin dashboard-க்காக: எல்லா users/sellers-ஓட details-ஐயும் திருப்பும்
+    public java.util.List<User> listAll() throws SQLException {
+        String sql = "SELECT * FROM users ORDER BY id DESC";
+        java.util.List<User> list = new java.util.ArrayList<>();
+        try (Connection c = DB.get();
+             PreparedStatement p = c.prepareStatement(sql);
+             ResultSet r = p.executeQuery()) {
+            while (r.next()) {
+                User x = new User();
+                x.id = r.getLong("id");
+                x.username = r.getString("username");
+                x.passwordHash = r.getString("password_hash");
+                x.email = r.getString("email");
+                x.role = r.getString("role");
+                x.lastLogin = r.getTimestamp("last_login");
+                list.add(x);
+            }
+        }
+        return list;
+    }
 }
