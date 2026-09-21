@@ -38,11 +38,12 @@ public class AuthServlet extends HttpServlet {
                 }
 
                 // பயனரை உருவாக்குதல்
-                dao.create(
-                    username,
-                    PasswordUtil.hash(password),
-                    role
-                );
+              dao.create(
+                username,
+                PasswordUtil.hash(password),
+                email,
+                role
+         );
 
                 // பதிவு முடிந்ததும் லாகின் பக்கத்திற்கு வெற்றிச் செய்தியுடன் அனுப்புதல்
                 request.setAttribute("message", "Registration successful! Please login.");
