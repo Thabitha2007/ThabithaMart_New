@@ -18,3 +18,9 @@
 0:0:0:0:0:0:0:1 - - [21/Sep/2026:13:17:15 +0530] "POST /thabithamart/seller/add-product HTTP/1.1" 302 - http-bio-8080-exec-1 85
 0:0:0:0:0:0:0:1 - - [21/Sep/2026:13:17:15 +0530] "GET /thabithamart/seller/products HTTP/1.1" 200 3086 http-bio-8080-exec-1 313
 0:0:0:0:0:0:0:1 - - [21/Sep/2026:13:18:13 +0530] "GET /thabithamart/seller/product/add HTTP/1.1" 404 1013 http-bio-8080-exec-1 4
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:11:41 +0530] "GET /thabithamart/home HTTP/1.1" 200 5244 http-bio-8080-exec-1 232
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:11:41 +0530] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:11:50 +0530] "GET /thabithamart/login HTTP/1.1" 200 5248 http-bio-8080-exec-5 72
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:14:32 +0530] "POST /thabithamart/login HTTP/1.1" 500 3835 http-bio-8080-exec-8 684
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:14:32 +0530] "POST /thabithamart/login HTTP/1.1" 500 3835 http-bio-8080-exec-9 646
+0:0:0:0:0:0:0:1 - - [21/Sep/2026:14:17:00 +0530] "POST /thabithamart/login HTTP/1.1" 200 5357 http-bio-8080-exec-3 1008
