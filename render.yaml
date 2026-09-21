@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: thabithamart
+    env: java
+    plan: free
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/dependency/webapp-runner.jar target/*.war --port $PORT
+    envVars:
+      - key: JAVA_VERSION
+        value: 17
