@@ -69,6 +69,9 @@ public class AuthServlet extends HttpServlet {
                 session.setAttribute("username", user.username);
                 session.setAttribute("role", user.role);
 
+                // புது வரி: இந்த login நேரத்தை DB-ல சேமிக்கிறோம்
+                dao.updateLastLogin(user.id);
+
                 response.sendRedirect(
                     request.getContextPath() + "/home"
                 );
