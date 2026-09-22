@@ -18,7 +18,8 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        .navbar .brand { color: #fff; font-size: 22px; font-weight: 700; }
+        .navbar .brand { color: #fff; font-size: 22px; font-weight: 700; text-decoration: none; }
+        .navbar .home-link { color: #ffcb45; text-decoration: none; font-size: 14px; margin-left: 16px; }
 
         .search-form {
             display: flex;
@@ -102,7 +103,8 @@
     nf.setMaximumFractionDigits(2);
 %>
 
-<a href="<%= request.getContextPath() %>/home" style="text-decoration:none;"><span class="brand">ThabithaMart</span></a>
+<div class="navbar">
+    <a href="<%= request.getContextPath() %>/home" class="brand">ThabithaMart</a>
 
     <form class="search-form" action="<%= request.getContextPath() %>/products" method="get">
         <input type="text" name="keyword" placeholder="Search products..."
@@ -111,6 +113,7 @@
     </form>
 
     <div class="links">
+        <a href="<%= request.getContextPath() %>/home" class="home-link">🏠 Home</a>
         <a href="<%= request.getContextPath() %>/products" class="<%= "All".equals(categoryName) ? "active" : "" %>">All</a>
         <a href="<%= request.getContextPath() %>/products?category=Men" class="<%= "Men".equals(categoryName) ? "active" : "" %>">Men</a>
         <a href="<%= request.getContextPath() %>/products?category=Women" class="<%= "Women".equals(categoryName) ? "active" : "" %>">Women</a>
