@@ -20,7 +20,11 @@
 <%
     Product product = (Product) request.getAttribute("product");
 %>
-<div class="navbar"><a href="<%= request.getContextPath() %>/seller/products">&larr; Back to My Products</a></div>
+<div class="navbar">
+    <a href="<%= request.getContextPath() %>/seller/products">&larr; Back to My Products</a>
+    &nbsp;|&nbsp;
+    <a href="<%= request.getContextPath() %>/home">Home</a>
+</div>
 <div class="card">
     <h2>Edit Product</h2>
     <% if (request.getAttribute("errorMessage") != null) { %>
