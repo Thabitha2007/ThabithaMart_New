@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.thabitha.thabithamart.model.User" %>
 <%
-    // Session-ல் இருந்து லாகின் செய்த பயனர் தகவல்களைப் பெறுதல்
+    // Get logged-in user details from session
     User currentUser = (User) session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     String username = (String) session.getAttribute("username");
@@ -36,6 +36,7 @@
             font-weight: bold;
             color: #ffffff;
             letter-spacing: 0.5px;
+            text-decoration: none;
         }
         .navbar .nav-items {
             display: flex;
@@ -145,22 +146,23 @@
 
     <!-- Header Navbar -->
     <div class="navbar">
-        <div class="brand">ThabithaMart</div>
+        <a href="${pageContext.request.contextPath}/home" class="brand">ThabithaMart</a>
         <div class="nav-items">
-            <a href="${pageContext.request.contextPath}/home">Browse</a>
+            <a href="${pageContext.request.contextPath}/home">Home</a>
+            <a href="${pageContext.request.contextPath}/products">Browse</a>
 
-            <%-- Seller அல்லது Admin லாகின் செய்திருந்தால் மட்டும் தெரியும் ஆப்ஷன்கள் --%>
+            <%-- Options visible only when a Seller or Admin is logged in --%>
            <% if ("SELLER".equals(role) || "ADMIN".equals(role)) { %>
                 <a href="${pageContext.request.contextPath}/seller/add-product" style="color: #28a745; font-weight: 600;">+ Add Product</a>
             <% } %>
-            <%-- Admin-க்கு மட்டும் பிரத்யேக ஆப்ஷன் --%>
+            <%-- Option visible only to Admin --%>
             <% if ("ADMIN".equals(role)) { %>
                 <a href="${pageContext.request.contextPath}/admin/dashboard" style="color: #ffc107; font-weight: 600;">Admin Panel</a>
             <% } %>
 
             <a href="${pageContext.request.contextPath}/cart">Cart</a>
 
-            <%-- பயனர் லாகின் செய்துள்ளாரா என்பதைச் சரிபார்த்தல் --%>
+            <%-- Check whether the user is logged in --%>
             <% if (currentUser != null || username != null) { %>
                 <span class="user-greeting">
                     <span>Hi, <strong><%= (username != null) ? username : currentUser.username %></strong></span>
@@ -177,7 +179,7 @@
     <div class="hero">
         <h1>Wear your<br>confidence.</h1>
         <p>Discover fashion from independent sellers.</p>
-        <a href="${pageContext.request.contextPath}/products?category=Men" class="explore-btn">Explore collection</a>
+        <a href="${pageContext.request.contextPath}/products" class="explore-btn">Explore collection</a>
     </div>
 
     <!-- Large Category Blocks -->

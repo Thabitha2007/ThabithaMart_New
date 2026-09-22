@@ -102,8 +102,7 @@
     nf.setMaximumFractionDigits(2);
 %>
 
-<div class="navbar">
-    <a href="<%= request.getContextPath() %>/home" style="text-decoration:none;"><div class="brand">ThabithaMart</div></a>
+<a href="<%= request.getContextPath() %>/home" style="text-decoration:none;"><span class="brand">ThabithaMart</span></a>
 
     <form class="search-form" action="<%= request.getContextPath() %>/products" method="get">
         <input type="text" name="keyword" placeholder="Search products..."
