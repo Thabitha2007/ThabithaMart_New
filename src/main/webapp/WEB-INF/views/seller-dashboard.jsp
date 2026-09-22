@@ -36,6 +36,7 @@
     <div class="brand">ThabithaMart Seller Panel</div>
     <div>
         <span style="color:#ddd;font-size:14px;">Hi, <%= user.username %></span>
+        <a href="<%=request.getContextPath() %>/home">Home</a>
         <a href="<%= request.getContextPath() %>/logout">Logout</a>
     </div>
 </div>
