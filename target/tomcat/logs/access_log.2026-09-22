@@ -228,3 +228,4 @@
 0:0:0:0:0:0:0:1 - - [22/Sep/2026:12:03:40 +0530] "GET /thabithamart/products?category=Accessories HTTP/1.1" 200 8574 http-bio-8080-exec-5 238
 0:0:0:0:0:0:0:1 - - [22/Sep/2026:12:04:23 +0530] "GET /thabithamart/products?keyword=titan HTTP/1.1" 200 5287 http-bio-8080-exec-5 271
 0:0:0:0:0:0:0:1 - - [22/Sep/2026:12:04:30 +0530] "GET /thabithamart/products?category=Accessories HTTP/1.1" 200 8574 http-bio-8080-exec-5 243
+0:0:0:0:0:0:0:1 - - [22/Sep/2026:12:53:07 +0530] "GET /ThabithaMart/login HTTP/1.1" 404 - http-bio-8080-exec-2 0

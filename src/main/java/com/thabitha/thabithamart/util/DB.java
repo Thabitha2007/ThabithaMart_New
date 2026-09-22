@@ -8,6 +8,21 @@ import java.sql.Statement;
 
 public final class DB {
 
+    // Server/Docker environment-ல JDBC drivers தானா register ஆகாது —
+    // அதனால இங்க explicit-ஆ load பண்றோம்.
+    static {
+        try {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("H2 driver not found on classpath: " + e.getMessage());
+        }
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("PostgreSQL driver not found on classpath: " + e.getMessage());
+        }
+    }
+
     private static final String DEFAULT_LOCAL_URL = "jdbc:h2:~/thabithamart;MODE=PostgreSQL";
 
     private DB() {
