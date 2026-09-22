@@ -103,7 +103,7 @@
 %>
 
 <div class="navbar">
-    <div class="brand">ThabithaMart</div>
+    <a href="<%= request.getContextPath() %>/home" style="text-decoration:none;"><div class="brand">ThabithaMart</div></a>
 
     <form class="search-form" action="<%= request.getContextPath() %>/products" method="get">
         <input type="text" name="keyword" placeholder="Search products..."
