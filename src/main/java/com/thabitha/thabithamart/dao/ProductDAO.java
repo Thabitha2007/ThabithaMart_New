@@ -102,4 +102,42 @@ public class ProductDAO {
         p.imageUrl = rs.getString("image_url");
         return p;
     }
+    /**
+     * Buyer side search — எல்லா sellers-ஓட products-லயும் தேடும்.
+     * category அல்லது keyword காலியா இருந்தா, அந்த filter skip ஆகும்.
+     */
+    public java.util.List<Product> search(String category, String keyword) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+
+        if (category != null && !category.trim().isEmpty() && !category.equalsIgnoreCase("All")) {
+            sql.append(" AND LOWER(category) = LOWER(?)");
+            params.add(category.trim());
+        }
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append(" AND (LOWER(name) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?))");
+            String likeKeyword = "%" + keyword.trim() + "%";
+            params.add(likeKeyword);
+            params.add(likeKeyword);
+        }
+
+        sql.append(" ORDER BY id DESC");
+
+        java.util.List<Product> list = new java.util.ArrayList<>();
+        try (Connection conn = DB.get();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
+            }
+        }
+        return list;
+    }
 }
