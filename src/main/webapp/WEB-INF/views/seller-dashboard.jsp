@@ -42,7 +42,7 @@
 <div class="container">
     <div class="top-row">
         <h1>My Products</h1>
-        <a class="add-link" href="<%= request.getContextPath() %>/seller/product/add">+ Add New Product</a>
+        <a class="add-link" href="<%= request.getContextPath() %>/seller/add-product">+ Add New Product</a>
     </div>
     <% if (products == null || products.isEmpty()) { %>
         <div class="empty">இன்னும் products எதுவும் add பண்ணல. "+ Add New Product" க்ளிக் பண்ணுங்க.</div>
