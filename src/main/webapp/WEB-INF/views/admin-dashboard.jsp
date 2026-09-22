@@ -28,7 +28,8 @@
 
 <div class="navbar">
     <div class="brand">ThabithaMart Admin Panel</div>
-    <a href="<%= request.getContextPath() %>/logout">Logout</a>
+        <a href="<%= request.getContextPath() %>/home"> Home</a>
+        <a href="<%= request.getContextPath() %>/logout">Logout</a>
 </div>
 
 <div class="container">
