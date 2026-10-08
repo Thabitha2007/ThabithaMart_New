@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:16 +0530] "GET /thabithamart/login HTTP/1.1" 200 5248 http-bio-8080-exec-2 218
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:16 +0530] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-4 0
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:19 +0530] "POST /thabithamart/login HTTP/1.1" 302 - http-bio-8080-exec-5 1315
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:19 +0530] "GET /thabithamart/home HTTP/1.1" 200 5645 http-bio-8080-exec-6 42
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:31 +0530] "GET /thabithamart/products?category=Footwear HTTP/1.1" 200 7586 http-bio-8080-exec-7 311
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:36 +0530] "GET /thabithamart/products?category=Accessories HTTP/1.1" 200 8574 http-bio-8080-exec-8 304
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:43 +0530] "GET /thabithamart/products HTTP/1.1" 200 21895 http-bio-8080-exec-9 293
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:52 +0530] "POST /thabithamart/login HTTP/1.1" 302 - http-bio-8080-exec-10 1228
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:40:52 +0530] "GET /thabithamart/home HTTP/1.1" 200 5645 http-bio-8080-exec-10 17
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:41:08 +0530] "GET /thabithamart/products HTTP/1.1" 200 21895 http-bio-8080-exec-4 287
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:41:13 +0530] "GET /thabithamart/cart HTTP/1.1" 404 985 http-bio-8080-exec-4 9
+0:0:0:0:0:0:0:1 - - [03/Oct/2026:18:42:57 +0530] "GET /thabithamart/seller/add-product HTTP/1.1" 200 2202 http-bio-8080-exec-7 57
