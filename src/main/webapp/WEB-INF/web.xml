@@ -8,7 +8,6 @@
 
     <session-config>
         <session-timeout>30</session-timeout>
-        <!-- NEW: session cookie security -->
         <cookie-config>
             <http-only>true</http-only>
         </cookie-config>
@@ -19,20 +18,7 @@
         <listener-class>com.thabitha.thabithamart.listener.AppListener</listener-class>
     </listener>
 
-    <!-- ==================== FILTERS ==================== -->
-
-    <!-- NEW (uncomment after we create EncodingFilter): UTF-8 on every request -->
-    <!--
-    <filter>
-        <filter-name>encodingFilter</filter-name>
-        <filter-class>com.thabitha.thabithamart.filter.EncodingFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>encodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    -->
-
+    <!-- FILTERS -->
     <filter>
         <filter-name>authFilter</filter-name>
         <filter-class>com.thabitha.thabithamart.controller.AuthFilter</filter-class>
@@ -40,13 +26,6 @@
     <filter-mapping>
         <filter-name>authFilter</filter-name>
         <url-pattern>/seller/*</url-pattern>
-        <!-- NEW (uncomment later): protect buyer pages too
-        <url-pattern>/cart/*</url-pattern>
-        <url-pattern>/checkout</url-pattern>
-        <url-pattern>/orders/*</url-pattern>
-        <url-pattern>/review/*</url-pattern>
-        <url-pattern>/wishlist/*</url-pattern>
-        -->
     </filter-mapping>
 
     <filter>
@@ -58,7 +37,7 @@
         <url-pattern>/admin/*</url-pattern>
     </filter-mapping>
 
-    <!-- ==================== EXISTING SERVLETS ==================== -->
+    <!-- EXISTING SERVLETS -->
     <servlet>
         <servlet-name>auth</servlet-name>
         <servlet-class>com.thabitha.thabithamart.controller.AuthServlet</servlet-class>
@@ -104,7 +83,7 @@
         <url-pattern>/products</url-pattern>
     </servlet-mapping>
 
-    <!-- ==================== SELLER PRODUCT MANAGEMENT (F2) ==================== -->
+    <!-- SELLER PRODUCT MANAGEMENT (F2) -->
     <servlet>
         <servlet-name>productList</servlet-name>
         <servlet-class>com.thabitha.thabithamart.controller.ProductListServlet</servlet-class>
@@ -122,6 +101,7 @@
         <servlet-name>addProduct</servlet-name>
         <url-pattern>/seller/add-product</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>editProduct</servlet-name>
         <servlet-class>com.thabitha.thabithamart.controller.EditProductServlet</servlet-class>
@@ -140,7 +120,7 @@
         <url-pattern>/seller/product/delete</url-pattern>
     </servlet-mapping>
 
-    <!-- ==================== ADMIN PANEL ==================== -->
+    <!-- ADMIN PANEL -->
     <servlet>
         <servlet-name>admin</servlet-name>
         <servlet-class>com.thabitha.thabithamart.controller.AdminServlet</servlet-class>
@@ -150,9 +130,31 @@
         <url-pattern>/admin/dashboard</url-pattern>
     </servlet-mapping>
 
-    <!-- ==================== NEW: SERVLETS TO ADD LATER ====================
-         Uncomment each block only after we create that class.
+    <!-- H2 DATABASE CONSOLE (testing only, remove before deployment) -->
+    <servlet>
+        <servlet-name>H2Console</servlet-name>
+        <servlet-class>org.h2.server.web.WebServlet</servlet-class>
+        <init-param>
+            <param-name>-webAllowOthers</param-name>
+            <param-value></param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>H2Console</servlet-name>
+        <url-pattern>/h2-console/*</url-pattern>
+    </servlet-mapping>
 
-    <servlet><servlet-name>register</servlet-name>
-        <servlet-class>com.thabitha.thabithamart.controller.RegisterServlet</servlet-class></servlet>
-    <servle
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/view/error-404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/view/error-500.jsp</location>
+    </error-page>
+
+    <welcome-file-list>
+        <welcome-file>login</welcome-file>
+    </welcome-file-list>
+
+</web-app>
