@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ProductDAO {
 
-    // இந்த seller-ஓட products மட்டும் திரும்பும்
+    // Returns only the products that belong to the given seller
     public List<Product> listBySeller(long sellerId) throws SQLException {
         String sql = "SELECT * FROM products WHERE seller_id = ? ORDER BY id DESC";
         List<Product> list = new ArrayList<>();
@@ -29,8 +29,8 @@ public class ProductDAO {
         return list;
     }
 
-    // ஒரு product-ஐ, அது இந்த seller-க்கு சொந்தமா இருந்தா மட்டும் திருப்பும்
-    // (வேற seller-ஓட product-ஐ edit பண்ண முடியாம தடுக்குறதுக்காக)
+    // Returns one product, but only if it belongs to this seller
+    // (prevents a seller from editing another seller's product)
     public Product getByIdAndSeller(long productId, long sellerId) throws SQLException {
         String sql = "SELECT * FROM products WHERE id = ? AND seller_id = ?";
         try (Connection conn = DB.get();
@@ -46,9 +46,24 @@ public class ProductDAO {
         return null;
     }
 
+    // Returns one product by id, regardless of seller (used by cart and buy now)
+    public Product getById(long productId) throws SQLException {
+        String sql = "SELECT * FROM products WHERE id = ?";
+        try (Connection conn = DB.get();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        }
+        return null;
+    }
+
     public void add(Product p) throws SQLException {
-        String sql = "INSERT INTO products (seller_id, name, description, price, stock, category, image_url) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (seller_id, name, description, price, stock, category, image_url, material, color) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DB.get();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, p.sellerId);
@@ -58,13 +73,15 @@ public class ProductDAO {
             ps.setInt(5, p.stock);
             ps.setString(6, p.category);
             ps.setString(7, p.imageUrl);
+            ps.setString(8, p.material);
+            ps.setString(9, p.color);
             ps.executeUpdate();
         }
     }
 
-    // seller_id-யும் WHERE-ல வெச்சிருக்கோம் - சொந்த product மட்டும் update ஆகும்
+    // seller_id is part of the WHERE clause, so only the seller's own product gets updated
     public boolean update(Product p) throws SQLException {
-        String sql = "UPDATE products SET name=?, description=?, price=?, stock=?, category=?, image_url=? " +
+        String sql = "UPDATE products SET name=?, description=?, price=?, stock=?, category=?, image_url=?, material=?, color=? " +
                      "WHERE id=? AND seller_id=?";
         try (Connection conn = DB.get();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -74,8 +91,10 @@ public class ProductDAO {
             ps.setInt(4, p.stock);
             ps.setString(5, p.category);
             ps.setString(6, p.imageUrl);
-            ps.setLong(7, p.id);
-            ps.setLong(8, p.sellerId);
+            ps.setString(7, p.material);
+            ps.setString(8, p.color);
+            ps.setLong(9, p.id);
+            ps.setLong(10, p.sellerId);
             return ps.executeUpdate() > 0;
         }
     }
@@ -90,6 +109,7 @@ public class ProductDAO {
         }
     }
 
+    // Converts one database row into a Product object
     private Product mapRow(ResultSet rs) throws SQLException {
         Product p = new Product();
         p.id = rs.getLong("id");
@@ -100,15 +120,18 @@ public class ProductDAO {
         p.stock = rs.getInt("stock");
         p.category = rs.getString("category");
         p.imageUrl = rs.getString("image_url");
+        p.material = rs.getString("material");
+        p.color = rs.getString("color");
         return p;
     }
+
     /**
-     * Buyer side search — எல்லா sellers-ஓட products-லயும் தேடும்.
-     * category அல்லது keyword காலியா இருந்தா, அந்த filter skip ஆகும்.
+     * Buyer-side search across the products of all sellers.
+     * If category or keyword is empty, that filter is skipped.
      */
-    public java.util.List<Product> search(String category, String keyword) throws SQLException {
+    public List<Product> search(String category, String keyword) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
-        java.util.List<Object> params = new java.util.ArrayList<>();
+        List<Object> params = new ArrayList<>();
 
         if (category != null && !category.trim().isEmpty() && !category.equalsIgnoreCase("All")) {
             sql.append(" AND LOWER(category) = LOWER(?)");
@@ -124,7 +147,7 @@ public class ProductDAO {
 
         sql.append(" ORDER BY id DESC");
 
-        java.util.List<Product> list = new java.util.ArrayList<>();
+        List<Product> list = new ArrayList<>();
         try (Connection conn = DB.get();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 

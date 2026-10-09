@@ -35,11 +35,15 @@ public class AddProductServlet extends HttpServlet {
             p.category = request.getParameter("category");
             p.imageUrl = request.getParameter("imageUrl");
 
+            // Specifications entered by the seller (shown on the cart page)
+            p.material = request.getParameter("material");
+            p.color = request.getParameter("color");
+
             productDAO.add(p);
             response.sendRedirect(request.getContextPath() + "/seller/products");
 
         } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Price மற்றும் Stock சரியான எண்ணா இருக்கணும்.");
+            request.setAttribute("errorMessage", "Price and Stock must be valid numbers.");
             request.getRequestDispatcher("/WEB-INF/views/add-product.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException("Could not add product", e);

@@ -1,56 +1,78 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.thabitha.thabithamart.model.Product" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Product</title>
-    <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f6fa; margin: 0; }
-        .navbar { background: #1a1a2e; padding: 16px 32px; }
-        .navbar a { color: #ffcb45; text-decoration: none; }
-        .card { max-width: 480px; margin: 40px auto; background: #fff; padding: 28px 32px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        label { font-size: 13px; color: #555; display: block; margin-top: 14px; margin-bottom: 4px; }
-        input, textarea, select { width: 100%; padding: 9px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: inherit; }
-        button { width: 100%; margin-top: 22px; padding: 11px; background: #1a1a2e; color: #fff; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
-        .error { color: #d6336c; font-size: 13px; margin-top: 12px; }
-    </style>
-</head>
-<body>
-<%
-    Product product = (Product) request.getAttribute("product");
-%>
-<div class="navbar">
-    <a href="<%= request.getContextPath() %>/seller/products">&larr; Back to My Products</a>
-    &nbsp;|&nbsp;
-    <a href="<%= request.getContextPath() %>/home">Home</a>
-</div>
-<div class="card">
-    <h2>Edit Product</h2>
-    <% if (request.getAttribute("errorMessage") != null) { %>
-        <div class="error"><%= request.getAttribute("errorMessage") %></div>
-    <% } %>
-    <form action="<%= request.getContextPath() %>/seller/product/edit" method="post">
-        <input type="hidden" name="id" value="<%= product.id %>">
-        <label>Product Name</label>
-        <input type="text" name="name" value="<%= product.name %>" required>
-        <label>Description</label>
-        <textarea name="description" required><%= product.description %></textarea>
-        <label>Price (&#8377;)</label>
-        <input type="number" step="0.01" min="0" name="price" value="<%= product.price %>" required>
-        <label>Stock Quantity</label>
-        <input type="number" min="0" name="stock" value="<%= product.stock %>" required>
-        <label>Category</label>
-        <select name="category" required>
-            <% String[] cats = {"Men", "Women", "Footwear", "Accessories"}; %>
-            <% for (String c : cats) { %>
-                <option value="<%= c %>" <%= c.equals(product.category) ? "selected" : "" %>><%= c %></option>
-            <% } %>
-        </select>
-        <label>Image URL</label>
-        <input type="text" name="imageUrl" value="<%= product.imageUrl %>" required>
-        <button type="submit">Save Changes</button>
-    </form>
-</div>
-</body>
-</html>
+package com.thabitha.thabithamart.controller;
+
+import com.thabitha.thabithamart.dao.ProductDAO;
+import com.thabitha.thabithamart.model.Product;
+import com.thabitha.thabithamart.model.User;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+
+public class EditProductServlet extends HttpServlet {
+
+    private final ProductDAO productDAO = new ProductDAO();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        User user = (User) request.getSession().getAttribute("user");
+        long productId = Long.parseLong(request.getParameter("id"));
+
+        try {
+            // Returns null if the product does not belong to this seller
+            Product product = productDAO.getByIdAndSeller(productId, user.id);
+
+            if (product == null) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "This product does not belong to you.");
+                return;
+            }
+
+            request.setAttribute("product", product);
+            request.getRequestDispatcher("/WEB-INF/views/edit-product.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            throw new ServletException("Could not load product", e);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        User user = (User) request.getSession().getAttribute("user");
+
+        try {
+            Product p = new Product();
+            p.id = Long.parseLong(request.getParameter("id"));
+            p.sellerId = user.id;
+            p.name = request.getParameter("name");
+            p.description = request.getParameter("description");
+            p.price = new BigDecimal(request.getParameter("price"));
+            p.stock = Integer.parseInt(request.getParameter("stock"));
+            p.category = request.getParameter("category");
+            p.imageUrl = request.getParameter("imageUrl");
+
+            // Specifications entered by the seller (shown on the cart page)
+            p.material = request.getParameter("material");
+            p.color = request.getParameter("color");
+
+            boolean updated = productDAO.update(p);
+
+            if (!updated) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "This product does not belong to you.");
+                return;
+            }
+
+            response.sendRedirect(request.getContextPath() + "/seller/products");
+
+        } catch (NumberFormatException e) {
+            // Reload the edit page; the JSP needs the "product" attribute, so a plain forward would fail
+            response.sendRedirect(request.getContextPath()
+                    + "/seller/product/edit?id=" + request.getParameter("id"));
+        } catch (Exception e) {
+            throw new ServletException("Could not update product", e);
+        }
+    }
+}
