@@ -88,7 +88,8 @@
         .price { font-size: 18px; font-weight: 700; color: #d6336c; }
         .add-btn { background: #1a1a2e; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; }
         .add-btn:hover { background: #ffcb45; color: #1a1a2e; }
-
+        .add-form { margin-top: 10px; display: flex; gap: 8px; }
+        .add-form select { padding: 7px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
         .empty-state { text-align: center; padding: 60px 20px; color: #999; font-size: 16px; }
     </style>
 </head>
@@ -144,8 +145,15 @@
                     <p class="desc"><%= p.description %></p>
                     <div class="price-row">
                         <span class="price">&#8377;<%= nf.format(p.price) %></span>
-                        <button class="add-btn">Add to Cart</button>
                     </div>
+                    <form class="add-form" method="post" action="<%= request.getContextPath() %>/cart">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="productId" value="<%= p.id %>">
+                        <select name="size">
+                            <option>S</option><option selected>M</option><option>L</option><option>XL</option>
+                        </select>
+                        <button type="submit" class="add-btn">Add to Cart</button>
+                    </form>
                 </div>
             </div>
         <% } %>
