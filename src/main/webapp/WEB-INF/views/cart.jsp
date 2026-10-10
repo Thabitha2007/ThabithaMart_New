@@ -107,7 +107,7 @@ h1 { font-size: 24px; color: #1a1a2e; margin-bottom: 16px; }
 
     <div class="summary">
         <div>Grand Total<div class="grand">&#8377;<%= nf.format(total) %></div></div>
-        <span class="btn disabled" title="Checkout comes next">Checkout (coming next)</span>
+        <a class="btn" href="<%= ctx %>/checkout">Proceed to checkout</a>
     </div>
 <% } %>
 </div>

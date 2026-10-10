@@ -161,6 +161,7 @@
         <filter-name>loginFilter</filter-name>
         <url-pattern>/cart</url-pattern>
         <url-pattern>/cart/*</url-pattern>
+        <url-pattern>/checkout</url-pattern>
     </filter-mapping>
 
     <servlet>
@@ -170,6 +171,15 @@
     <servlet-mapping>
         <servlet-name>cart</servlet-name>
         <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>checkout</servlet-name>
+        <servlet-class>com.thabitha.thabithamart.controller.CheckoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
     
     <welcome-file-list>

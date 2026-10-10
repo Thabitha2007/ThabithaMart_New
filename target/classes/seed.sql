@@ -1,6 +1,5 @@
-MERGE INTO products(name, category, price, stock, image_url, description)
-KEY(name)
-VALUES
+INSERT INTO products(name, category, price, stock, image_url, description)
+SELECT * FROM (VALUES
 ('Classic White T-Shirt', 'Men', 499.00, 25, 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&q=80', '100% pure cotton breathable everyday wear'),
 ('Slim Fit Denim Jeans', 'Men', 1299.00, 18, 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&q=80', 'Stretchable comfortable blue denim jeans'),
 ('Casual Linen Shirt', 'Men', 899.00, 15, 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&q=80', 'Full-sleeve formal and casual wear shirt'),
@@ -9,3 +8,5 @@ VALUES
 ('Sporty Track Pants', 'Men', 699.00, 20, 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500&q=80', 'Quick-dry activewear track pants for gym & run'),
 ('Striped Polo T-Shirt', 'Men', 749.00, 16, 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=500&q=80', 'Collared premium polo shirt for weekend outings'),
 ('Leather Bomber Jacket', 'Men', 2899.00, 10, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80', 'Classic vintage black faux leather jacket');
+) AS v(name, category, price, stock, image_url, description)
+WHERE NOT EXISTS (SELECT 1 FROM products p WHERE p.name = v.name);
