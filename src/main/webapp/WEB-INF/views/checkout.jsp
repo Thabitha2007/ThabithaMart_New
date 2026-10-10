@@ -10,7 +10,7 @@
 <%
     List<CartItem> items = (List<CartItem>) request.getAttribute("cartItems");
     String error = (String) request.getAttribute("error");
-    
+    ShippingInfo ship = (ShippingInfo) request.getAttribute("ship");
     NumberFormat nf = NumberFormat.getInstance(new Locale("en", "IN"));
     nf.setMinimumFractionDigits(2);
     nf.setMaximumFractionDigits(2);
@@ -38,6 +38,9 @@ h1 { font-size: 24px; color: #1a1a2e; margin-bottom: 16px; }
 .pay label { display: block; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; cursor: pointer; }
 .error { background: #fdecea; color: #b71c1c; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
 .note { font-size: 12px; color: #888; margin-top: 8px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; }
+.field input, .field textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: inherit; }
 .btn { background: #1a1a2e; color: #fff; border: none; padding: 12px 22px; border-radius: 6px; font-size: 15px; cursor: pointer; width: 100%; }
 </style>
 </head>
@@ -62,6 +65,23 @@ h1 { font-size: 24px; color: #1a1a2e; margin-bottom: 16px; }
 </div>
 
 <form method="post" action="<%= ctx %>/checkout">
+    <div class="card">
+        <strong>Delivery details</strong><br><br>
+        <div class="field">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" required minlength="2" maxlength="100"
+                   value="<%= ship != null ? esc(ship.name) : "" %>">
+        </div>
+        <div class="field">
+            <label for="mobile">Mobile number</label>
+            <input type="tel" id="mobile" name="mobile" required pattern="[6-9][0-9]{9}" maxlength="10"
+                   title="10-digit mobile number" value="<%= ship != null ? esc(ship.mobile) : "" %>">
+        </div>
+        <div class="field">
+            <label for="address">Delivery address</label>
+            <textarea id="address" name="address" rows="3" required minlength="10" maxlength="300"><%= ship != null ? esc(ship.address) : "" %></textarea>
+        </div>
+    </div>
     <div class="card pay">
         <strong>Payment method</strong><br><br>
         <label><input type="radio" name="paymentMethod" value="CARD" checked> Credit / Debit card</label>

@@ -41,6 +41,13 @@ h1 { font-size: 24px; color: #1a1a2e; margin: 8px 0; }
     <div class="tick">&#10004;</div>
     <h1>Your order has been placed successfully!</h1>
     <p>Payment confirmed (demo). Order #<%= order.id %> &middot; Status: <strong><%= esc(order.status) %></strong></p>
+    
+    <div class="card">
+        <strong>Delivering to</strong><br>
+        <%= esc(order.shipName) %><br>
+        <%= esc(order.shipAddress) %><br>
+        Mobile: <%= esc(order.shipMobile) %>
+    </div>
 
     <div class="card">
         <% for (OrderItem it : order.items) { %>
