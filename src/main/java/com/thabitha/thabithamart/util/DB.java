@@ -8,16 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.mindrot.jbcrypt.BCrypt;           // NEW
-import org.slf4j.Logger;                     // NEW
-import org.slf4j.LoggerFactory;              // NEW
+import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.zaxxer.hikari.HikariConfig;       // NEW
-import com.zaxxer.hikari.HikariDataSource;   // NEW
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public final class DB {
 
-    private static final Logger log = LoggerFactory.getLogger(DB.class); // NEW
+    private static final Logger log = LoggerFactory.getLogger(DB.class);
 
     // Server/Docker environment-ல JDBC drivers தானா register ஆகாது —
     // அதனால இங்க explicit-ஆ load பண்றோம்.
@@ -36,7 +36,6 @@ public final class DB {
 
     private static final String DEFAULT_LOCAL_URL = "jdbc:h2:~/thabithamart;MODE=PostgreSQL";
 
-    // NEW: HikariCP connection pool (created on first use)
     private static HikariDataSource dataSource;
 
     private DB() {
@@ -70,7 +69,6 @@ public final class DB {
         return rawUrl;
     }
 
-    // NEW: builds the pool once, using the same URL and credential rules as before
     private static synchronized HikariDataSource pool() {
         if (dataSource == null || dataSource.isClosed()) {
             String jdbcUrl = resolveJdbcUrl(System.getenv("DATABASE_URL"));
@@ -105,12 +103,10 @@ public final class DB {
         return dataSource;
     }
 
-    // CHANGED: now returns a pooled connection. Callers still use try-with-resources.
     public static Connection get() throws SQLException {
         return pool().getConnection();
     }
 
-    // NEW: called when the app stops
     public static synchronized void close() {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
@@ -122,8 +118,8 @@ public final class DB {
         try (Connection c = get(); Statement s = c.createStatement()) {
             if (c.getMetaData().getURL().startsWith("jdbc:h2:")) {
                 s.execute("RUNSCRIPT FROM 'classpath:schema.sql' CHARSET 'UTF-8'");
-                fixDemoPasswords(c);   // NEW
-                assignOrphanProducts(c); // NEW
+                fixDemoPasswords(c);
+                assignOrphanProducts(c);
             } else {
                 s.execute("CREATE TABLE IF NOT EXISTS users ("
                         + "id BIGSERIAL PRIMARY KEY, "
@@ -146,13 +142,52 @@ public final class DB {
                 s.execute("INSERT INTO users (username, password_hash, email, role) VALUES "
                         + "('admin', '$2a$12$t7S16S/Gz8onn9Bo31LlyeIrXWMJJlE0F2HaSkDv22hBylqyToPE6', 'admin@thabithamart.com', 'ADMIN') "
                         + "ON CONFLICT (username) DO NOTHING");
+
+                // NEW: columns and tables the app needs on PostgreSQL (Render)
+                s.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TIMESTAMP");
+                s.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(100)");
+                s.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS mobile VARCHAR(15)");
+                s.execute("ALTER TABLE products ADD COLUMN IF NOT EXISTS material VARCHAR(100) DEFAULT 'Cotton blend'");
+                s.execute("ALTER TABLE products ADD COLUMN IF NOT EXISTS color VARCHAR(50) DEFAULT 'Assorted'");
+                s.execute("ALTER TABLE products ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT TRUE");
+                s.execute("ALTER TABLE products ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+                s.execute("CREATE TABLE IF NOT EXISTS cart_items (id BIGSERIAL PRIMARY KEY, "
+                        + "user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE, "
+                        + "product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE, "
+                        + "size VARCHAR(10) NOT NULL, quantity INT NOT NULL DEFAULT 1, "
+                        + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE (user_id, product_id, size))");
+                s.execute("CREATE TABLE IF NOT EXISTS wishlist_items (id BIGSERIAL PRIMARY KEY, "
+                        + "user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE, "
+                        + "product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE, "
+                        + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE (user_id, product_id))");
+                s.execute("CREATE TABLE IF NOT EXISTS orders (id BIGSERIAL PRIMARY KEY, "
+                        + "buyer_id BIGINT NOT NULL REFERENCES users(id), "
+                        + "status VARCHAR(20) NOT NULL DEFAULT 'PENDING', "
+                        + "total_amount DECIMAL(10,2) NOT NULL, "
+                        + "ship_name VARCHAR(100), ship_address VARCHAR(300), ship_mobile VARCHAR(15), "
+                        + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+                        + "CONSTRAINT chk_order_status CHECK (status IN ('PENDING','CONFIRMED','SHIPPED','DELIVERED','CANCELLED')))");
+                s.execute("CREATE TABLE IF NOT EXISTS order_items (id BIGSERIAL PRIMARY KEY, "
+                        + "order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE, "
+                        + "product_id BIGINT REFERENCES products(id) ON DELETE SET NULL, "
+                        + "seller_id BIGINT, "
+                        + "product_name VARCHAR(150) NOT NULL, size VARCHAR(10), quantity INT NOT NULL, "
+                        + "unit_price DECIMAL(10,2) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+                s.execute("CREATE TABLE IF NOT EXISTS reviews (id BIGSERIAL PRIMARY KEY, "
+                        + "product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE, "
+                        + "user_id BIGINT NOT NULL REFERENCES users(id), "
+                        + "rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5), comment VARCHAR(1000), "
+                        + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE (product_id, user_id))");
+                s.execute("CREATE INDEX IF NOT EXISTS idx_cart_user ON cart_items(user_id)");
+                s.execute("CREATE INDEX IF NOT EXISTS idx_orders_buyer ON orders(buyer_id)");
+                s.execute("CREATE INDEX IF NOT EXISTS idx_order_items_order ON order_items(order_id)");
+                s.execute("CREATE INDEX IF NOT EXISTS idx_reviews_product ON reviews(product_id)");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    // NEW: if a demo account's stored hash does not match its documented password, replace it
     private static void fixDemoPasswords(Connection c) throws SQLException {
         String[][] demo = { {"seller1", "seller123"}, {"buyer1", "buyer123"} };
         for (String[] d : demo) {
@@ -166,7 +201,7 @@ public final class DB {
                 }
             }
             if (hash == null) {
-                continue;
+                continue;   // FIXED: this line and the closing brace were missing
             }
             boolean ok;
             try {
@@ -185,7 +220,6 @@ public final class DB {
         }
     }
 
-    // NEW: seeded products with no seller become seller1's products
     private static void assignOrphanProducts(Connection c) throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(
                 "UPDATE products SET seller_id = (SELECT id FROM users WHERE username = ?) WHERE seller_id IS NULL")) {
